@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #F2F2F2;
+    color: #5F6269;
+    font-family: Calibri, 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2 {
+    font-family: 'Calibri Light', Calibri, 'Open Sans', system-ui, sans-serif;
+    font-weight: 300;
+    color: #002957;
+  }
+
+  /* Custom range slider — consistent across browsers */
+  input[type='range'] {
+    @apply h-1 rounded-full cursor-pointer;
+    appearance: none;
+    background: #DFE1DF;
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #F0531E;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.20);
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #F0531E;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.20);
+  }
+
+  input[type='range']:focus {
+    outline: none;
+  }
+
+  /* Text inputs — lighter resting border, soft focus */
+  input[type='text'],
+  input[type='number'],
+  select {
+    border-color: #C7C9C8;
+    border-radius: 2px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  input[type='text']:focus,
+  input[type='number']:focus,
+  select:focus {
+    outline: none;
+    border-color: #F0531E;
+    box-shadow: 0 0 0 2px rgba(240, 83, 30, 0.12);
+  }
+
+  /* Number inputs — remove spinner arrows */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+}
+
+@layer components {
+  /* Standard white panel card used across section interiors — flat, hard-edged */
+  .panel {
+    background-color: #FFFFFF;
+    border-radius: 2px;
+    border: 1px solid #C7C9C8;
+    box-shadow: none;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #C7C9C8 transparent;
+  }
+}

@@ -1,0 +1,240 @@
+/* ============================================================
+   Hugessen Consulting — Colors & Type Foundation
+   ============================================================
+   Source: Hugessen 16:9 PowerPoint template (theme1.xml)
+   Brand: Independent. Business-minded. Practical. Client-first.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+/* NOTE: Calibri / Calibri Light are the official Hugessen typefaces (proprietary
+   Microsoft fonts that ship with Office). They cannot be bundled here, so the
+   @font-face blocks below point at the expected upload paths in fonts/ — drop the
+   licensed files there and they resolve automatically. Until then, the token
+   fallback stack (Open Sans → system sans) renders in their place. */
+
+@font-face {
+  font-family: 'Calibri';
+  src: url('fonts/Calibri.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Calibri';
+  src: url('fonts/Calibri-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Calibri Light';
+  src: url('fonts/Calibri-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ---------- BRAND CORE ---------- */
+  --hugessen-orange:      #F0531E;   /* Primary brand — accents, key headlines, links */
+  --hugessen-orange-deep: #EA3C18;   /* Pressed / hover deepening */
+  --hugessen-orange-link: #F16824;   /* Hyperlink color from theme */
+  --hugessen-navy:        #002957;   /* Primary dark — section bands, title slides */
+  --hugessen-navy-deep:   #011D45;   /* Deeper navy for layered surfaces */
+
+  /* ---------- NEUTRALS (from theme) ---------- */
+  --charcoal:             #5F6269;   /* Default body text (dk1 in theme) */
+  --slate:                #464B54;   /* Stronger labels */
+  --ink:                  #32363D;   /* Headlines on white */
+  --gray-300:             #C7C9C8;   /* Borders, dividers (accent2) */
+  --gray-200:             #DFE1DF;   /* Soft surfaces, table stripes (accent1) */
+  --gray-100:             #F2F2F2;   /* Page-section background */
+  --white:                #FFFFFF;
+  --black:                #000000;
+
+  /* ---------- SEMANTIC: FOREGROUND ---------- */
+  --fg-1:    var(--ink);          /* Primary heading on white */
+  --fg-2:    var(--charcoal);     /* Body text */
+  --fg-3:    var(--slate);        /* Secondary labels */
+  --fg-muted:#8A8D93;             /* Captions, footnotes */
+  --fg-on-dark:    var(--white);
+  --fg-on-orange:  var(--white);
+  --fg-accent:     var(--hugessen-orange);
+  --fg-link:       var(--hugessen-orange-link);
+
+  /* ---------- SEMANTIC: BACKGROUND ---------- */
+  --bg-page:   var(--white);
+  --bg-soft:   var(--gray-100);
+  --bg-band:   var(--hugessen-navy);   /* Section dividers / title slides */
+  --bg-accent: var(--hugessen-orange); /* Accent blocks */
+  --bg-card:   var(--white);
+
+  /* ---------- BORDERS / DIVIDERS ---------- */
+  --border-hairline: 1px solid var(--gray-300);
+  --border-strong:   2px solid var(--hugessen-navy);
+  --border-accent:   3px solid var(--hugessen-orange);
+  --rule-thin:       1px solid var(--gray-300);
+
+  /* ---------- TYPE: FAMILIES ---------- */
+  --font-sans:    'Calibri', 'Open Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-light:   'Calibri Light', 'Calibri', 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'Roboto Mono', 'Consolas', 'Menlo', monospace;
+
+  /* ---------- TYPE: SCALE (paged / slide-friendly) ---------- */
+  --fs-hero:   56px;   /* Title-slide hero */
+  --fs-h1:     40px;   /* Slide title */
+  --fs-h2:     28px;   /* Subhead / section header */
+  --fs-h3:     20px;   /* Sub-sub head, card title */
+  --fs-h4:     16px;   /* Eyebrow / kicker */
+  --fs-body:   14px;   /* Default body */
+  --fs-small:  12px;   /* Footnotes, source lines */
+  --fs-micro:  10px;   /* Page numbers, legal */
+
+  /* ---------- TYPE: WEIGHTS ---------- */
+  --fw-light:    300;   /* @kind font */
+  --fw-regular:  400;   /* @kind font */
+  --fw-semibold: 600;   /* @kind font */
+  --fw-bold:     700;   /* @kind font */
+
+  /* ---------- TYPE: LINE HEIGHT ---------- */
+  --lh-tight:  1.15;    /* @kind font */
+  --lh-snug:   1.30;    /* @kind font */
+  --lh-normal: 1.45;    /* @kind font */
+  --lh-loose:  1.60;    /* @kind font */
+
+  /* ---------- TYPE: TRACKING ---------- */
+  --ls-eyebrow: 0.16em;   /* @kind font */
+  --ls-caps:    0.08em;   /* @kind font */
+  --ls-body:    0;        /* @kind font */
+
+  /* ---------- SPACING ---------- */
+  --sp-1:   4px;
+  --sp-2:   8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+
+  /* ---------- RADII ---------- */
+  /* Hugessen visual language is hard-edged & corporate — radii are minimal. */
+  --r-none: 0;       /* @kind radius */
+  --r-sm:   2px;
+  --r-md:   4px;     /* Default for soft UI surfaces */
+  --r-lg:   8px;     /* Reserved; rarely used */
+
+  /* ---------- ELEVATION (rarely used; print-first brand) ---------- */
+  --shadow-card: 0 1px 2px rgba(50,54,61,0.06), 0 2px 6px rgba(50,54,61,0.06);
+  --shadow-pop:  0 4px 14px rgba(0,41,87,0.10), 0 1px 3px rgba(0,41,87,0.08);
+  --shadow-none: none;
+
+  /* ---------- LAYOUT TOKENS ---------- */
+  --slide-w:   1280px;   /* @kind other */
+  --slide-h:    720px;   /* @kind other */
+  --slide-pad:   48px;   /* @kind spacing */
+
+  /* ---------- MOTION ---------- */
+  --ease-out:    cubic-bezier(.2,.6,.2,1);   /* @kind other */
+  --ease-in-out: cubic-bezier(.4,0,.2,1);    /* @kind other */
+  --dur-fast:   120ms;   /* @kind other */
+  --dur-base:   200ms;   /* @kind other */
+  --dur-slow:   360ms;   /* @kind other */
+}
+
+/* ============================================================
+   SEMANTIC ELEMENTS
+   ============================================================ */
+
+html, body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--fg-2);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, .h1 {
+  font-family: var(--font-light);
+  font-weight: var(--fw-light);
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  color: var(--hugessen-navy);
+  margin: 0 0 var(--sp-4);
+  letter-spacing: -0.005em;
+}
+
+h2, .h2 {
+  font-family: var(--font-light);
+  font-weight: var(--fw-light);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-snug);
+  color: var(--hugessen-navy);
+  margin: 0 0 var(--sp-3);
+}
+
+h3, .h3 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+  color: var(--hugessen-navy);
+  margin: 0 0 var(--sp-3);
+}
+
+h4, .h4 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h4);
+  line-height: var(--lh-snug);
+  color: var(--fg-1);
+  margin: 0 0 var(--sp-2);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-semibold);
+  font-size: 11px;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--hugessen-orange);
+}
+
+p { margin: 0 0 var(--sp-3); color: var(--fg-2); }
+
+small, .small { font-size: var(--fs-small); color: var(--fg-3); }
+.micro { font-size: var(--fs-micro); color: var(--fg-muted); letter-spacing: var(--ls-caps); }
+.footnote { font-size: var(--fs-small); color: var(--fg-3); font-style: italic; }
+
+a, .link {
+  color: var(--fg-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+a:hover { color: var(--hugessen-orange-deep); }
+
+hr, .rule { border: 0; border-top: var(--rule-thin); margin: var(--sp-4) 0; }
+.rule-accent { border: 0; border-top: var(--border-accent); margin: var(--sp-4) 0; width: 48px; }
+
+code, .mono { font-family: var(--font-mono); font-size: 0.92em; }
+
+/* Stat / number callouts (used in About-Hugessen style cards) */
+.stat-num {
+  font-family: var(--font-light);
+  font-weight: var(--fw-light);
+  font-size: 48px;
+  line-height: 1;
+  color: var(--hugessen-orange);
+}
+.stat-label {
+  font-size: var(--fs-small);
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-caps);
+}

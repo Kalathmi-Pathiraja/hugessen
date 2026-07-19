@@ -1,0 +1,20 @@
+export const BRAND = {
+  navy:       '#002957',
+  navyDeep:   '#011D45',
+  orange:     '#F0531E',
+  orangeDeep: '#EA3C18',
+  slate:      '#464B54',
+  charcoal:   '#5F6269',
+  ink:        '#32363D',
+  lightGrey:  '#DFE1DF',
+  gray300:    '#C7C9C8',
+  offWhite:   '#F2F2F2',
+  white:      '#FFFFFF',
+  teal:       '#0E7490',
+  // Chart-specific
+  rsuBar:     '#002957',
+  psuBar:     '#F0531E',
+  optionBar:  '#0E7490',
+  targetLine: '#002957',
+  peerBand:   '#C7C9C8',
+} as const
