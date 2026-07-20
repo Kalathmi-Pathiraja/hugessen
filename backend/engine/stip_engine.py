@@ -286,6 +286,7 @@ def run_stip_simulation(payload: Dict[str, Any]) -> Dict[str, Any]:
                 "gate_probability_pct": round(gate_prob * 100, 1),
                 "simulation_mode": "relative",
                 "inferred_g": None, "inferred_sigma": None, "starting_value": None,
+                "effective_sigma": None, "effective_g": None,
             })
             continue
 
@@ -318,6 +319,8 @@ def run_stip_simulation(payload: Dict[str, Any]) -> Dict[str, Any]:
             "inferred_g": inferred.get("inferred_g"),
             "inferred_sigma": inferred.get("inferred_sigma"),
             "starting_value": inferred.get("starting_value"),
+            "effective_sigma": inferred.get("effective_sigma"),
+            "effective_g": inferred.get("effective_g"),
         })
 
     target_opp = float(payload["base_salary"]) * float(payload["target_stip_pct"])

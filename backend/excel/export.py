@@ -107,11 +107,20 @@ def export_stip(inputs: Dict[str, Any], results: Dict[str, Any]) -> bytes:
     ws_in.write(r, 3, "Volatility σ", hdr_fmt)
     ws_in.set_column(2, 3, 16)
     r += 1
-    for m in inputs["scorecard_metrics"]:
+    metric_stats_by_index = results.get("metric_stats", [])
+    for i, m in enumerate(inputs["scorecard_metrics"]):
+        stat = metric_stats_by_index[i] if i < len(metric_stats_by_index) else {}
         ws_in.write(r, 0, m["name"])
         ws_in.write(r, 1, f"{m['weight']*100:.0f}%")
         ws_in.write(r, 2, f"{m['budget_target']:,.2f}")
-        ws_in.write(r, 3, f"{m['volatility_sigma']*100:.1f}%")
+        if stat.get("simulation_mode") == "target_difficulty":
+            effective = stat.get("effective_sigma")
+            inferred = stat.get("inferred_sigma")
+            label = "override" if effective is not None and inferred is not None and round(effective, 1) != round(inferred, 1) else "inferred"
+            sigma_display = f"{effective:.1f}% ({label})" if effective is not None else f"{m['volatility_sigma']*100:.1f}%"
+        else:
+            sigma_display = f"{m['volatility_sigma']*100:.1f}%"
+        ws_in.write(r, 3, sigma_display)
         r += 1
 
     # -----------------------------------------------------------------------
