@@ -13,8 +13,7 @@ export function fmtPct(v: number | null | undefined): string {
 
 export function fmtCompact(v: number | null | undefined): string {
   if (v === null || v === undefined) return '—'
-  if (Math.abs(v) >= 1_000_000_000) return `$${(v / 1_000_000_000).toFixed(1)}B`
-  if (Math.abs(v) >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`
-  if (Math.abs(v) >= 1_000) return `$${(v / 1_000).toFixed(0)}k`
+  if (Math.abs(v) >= 1_000_000_000) return `$${(v / 1_000_000_000).toFixed(2)}B`
+  if (Math.abs(v) >= 1_000) return `$${Math.round(v / 1_000).toLocaleString()}K`
   return `$${v.toFixed(0)}`
 }

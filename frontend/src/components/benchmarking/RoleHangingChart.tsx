@@ -60,7 +60,7 @@ function CustomTooltip({ active, payload }: any) {
       <p style={{ fontWeight: 700, marginBottom: 4 }}>{row.metric}</p>
       <p>P25 {fmtCompact(row.p25)} · P50 {fmtCompact(row.p50)} · P75 {fmtCompact(row.p75)}</p>
       {row.avg != null && <p>Average {fmtCompact(row.avg)}</p>}
-      {row.client != null && <p style={{ color: BRAND.orange }}>Client {fmtCompact(row.client)} ({row.pct?.toFixed(0)}th percentile)</p>}
+      {row.client != null && <p style={{ color: BRAND.orange }}>Client {fmtCompact(row.client)} ({row.pct?.toFixed(1)}th percentile)</p>}
     </div>
   )
 }
@@ -132,7 +132,7 @@ export default function RoleHangingChart({ results, weighted }: Props) {
             <p className="text-slate">P25 {fmtCompact(row.p25)} · P50 <span className="font-semibold text-navy">{fmtCompact(row.p50)}</span> · P75 {fmtCompact(row.p75)}</p>
             {row.avg != null && <p className="text-slate">Avg {fmtCompact(row.avg)}</p>}
             {row.client != null && (
-              <p className="text-orange font-medium mt-0.5">Client {fmtCompact(row.client)} ({row.pct?.toFixed(0)}th)</p>
+              <p className="text-orange font-medium mt-0.5">Client {fmtCompact(row.client)} ({row.pct?.toFixed(1)}th)</p>
             )}
           </div>
         ))}

@@ -41,7 +41,7 @@ function PositioningTooltip({ active, p25, p50, p75, avg, clientPay, clientPerce
       <p>Average {fmtCompact(avg)}</p>
       {clientPay !== null && (
         <p style={{ color: BRAND.orange }}>
-          Client {fmtCompact(clientPay)}{clientPercentile !== null ? ` (${clientPercentile.toFixed(0)}th percentile)` : ''}
+          Client {fmtCompact(clientPay)}{clientPercentile !== null ? ` (${clientPercentile.toFixed(1)}th percentile)` : ''}
         </p>
       )}
     </div>
@@ -85,7 +85,7 @@ export default function HangingBarChart({ label, p25, p50, p75, avg, clientPay, 
                 y={clientPay}
                 shape={<ClientDiamondDot />}
                 label={{
-                  value: clientPercentile !== null ? `${clientPercentile.toFixed(0)}th` : undefined,
+                  value: clientPercentile !== null ? `${clientPercentile.toFixed(1)}th` : undefined,
                   position: 'right',
                   fill: BRAND.orange,
                   fontSize: 11,

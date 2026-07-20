@@ -55,7 +55,7 @@ function YoYTooltip({ active, payload }: any) {
       <p>Average {fmtCompact(s.avg)} · {s.n_peers} peers</p>
       {s.client != null && (
         <p style={{ color: BRAND.orange }}>
-          Client {fmtCompact(s.client)}{s.client_percentile != null ? ` (${s.client_percentile.toFixed(0)}th)` : ''}
+          Client {fmtCompact(s.client)}{s.client_percentile != null ? ` (${s.client_percentile.toFixed(1)}th)` : ''}
         </p>
       )}
     </div>
@@ -242,7 +242,7 @@ export default function YoYTrendChart({ benchmarkData, role }: Props) {
             {r.stats.client != null && (
               <p className="text-orange font-medium mt-0.5">
                 Client {fmtCompact(r.stats.client)}
-                {r.stats.client_percentile != null && ` (${r.stats.client_percentile.toFixed(0)}th)`}
+                {r.stats.client_percentile != null && ` (${r.stats.client_percentile.toFixed(1)}th)`}
               </p>
             )}
           </div>
