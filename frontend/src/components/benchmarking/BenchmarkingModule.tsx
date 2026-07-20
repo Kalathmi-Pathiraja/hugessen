@@ -163,12 +163,14 @@ export default function BenchmarkingModule() {
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded text-red-700 text-sm">{error}</div>
       )}
 
-      {isLoading && (
-        <div className="mb-4 flex items-center gap-2 text-sm text-charcoal">
-          <span className="inline-block w-4 h-4 border-2 border-orange border-t-transparent rounded-full animate-spin" />
-          Calculating…
-        </div>
-      )}
+      <div className="mb-4 h-5 flex items-center gap-2 text-sm text-charcoal">
+        {isLoading && (
+          <>
+            <span className="inline-block w-4 h-4 border-2 border-orange border-t-transparent rounded-full animate-spin" />
+            Calculating…
+          </>
+        )}
+      </div>
 
       <div className="bg-white border border-gray300 rounded px-[18px] py-3.5 flex items-center justify-between gap-6 mb-5">
         <RoleTabBar roles={benchmarkData.roles} selectedRole={selectedRole} onChange={handleRoleChange} />
