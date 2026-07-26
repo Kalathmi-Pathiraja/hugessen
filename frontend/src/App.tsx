@@ -4,10 +4,11 @@ import LtipPage from './components/ltip/LtipPage'
 import BenchmarkingModule from './components/benchmarking/BenchmarkingModule'
 import BenchmarkingErrorBoundary from './components/benchmarking/BenchmarkingErrorBoundary'
 import AIHubPage from './components/aihub/AIHubPage'
+import DashboardPage from './components/dashboard/DashboardPage'
 
-type Tab = 'stip' | 'ltip' | 'benchmarking' | 'aihub'
+type Tab = 'home' | 'stip' | 'ltip' | 'benchmarking' | 'aihub'
 
-const TOOLS: { id: Tab; label: string }[] = [
+const TOOLS: { id: Exclude<Tab, 'home'>; label: string }[] = [
   { id: 'stip', label: 'STIP' },
   { id: 'ltip', label: 'LTIP' },
   { id: 'benchmarking', label: 'Compensation Benchmarking' },
@@ -15,6 +16,7 @@ const TOOLS: { id: Tab; label: string }[] = [
 ]
 
 const HEADER_TITLE: Record<Tab, string> = {
+  home: 'Home',
   stip: 'Incentive Plan Design',
   ltip: 'Incentive Plan Design',
   benchmarking: 'Executive Compensation Benchmarking',
@@ -22,13 +24,13 @@ const HEADER_TITLE: Record<Tab, string> = {
 }
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>('stip')
+  const [tab, setTab] = useState<Tab>('home')
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-offwhite font-sans flex">
-      {/* Icon rail — always visible */}
-      <div className="w-14 shrink-0 bg-white border-r border-gray300 flex flex-col items-center py-4 z-40">
+      {/* Icon rail — always visible, pinned to viewport regardless of page scroll */}
+      <div className="w-14 shrink-0 bg-white border-r border-gray300 flex flex-col items-center py-4 z-40 sticky top-0 h-screen">
         <button
           onClick={() => setSidebarOpen(o => !o)}
           aria-label="Toggle navigation"
@@ -49,10 +51,21 @@ export default function App() {
           />
           <div className="fixed left-14 top-0 bottom-0 w-[236px] bg-white border-r border-gray300 shadow-popover z-40 flex flex-col">
             <div className="px-[22px] pt-6 pb-5 border-b border-gray200">
-              <div className="text-navy font-bold text-base tracking-wide font-display">HUGESSEN</div>
-              <div className="text-[10px] uppercase tracking-[0.08em] text-charcoal mt-1">Advisory Platform</div>
+              <img src="/branding/hugessen-logo.png" alt="Hugessen Consulting" className="w-full max-w-[150px] h-auto block" />
+              <div className="text-[10px] uppercase tracking-[0.08em] text-charcoal mt-2">Advisory Platform</div>
             </div>
             <nav className="flex-1 px-3 py-4 overflow-y-auto">
+              <button
+                onClick={() => { setTab('home'); setSidebarOpen(false) }}
+                className={`w-full text-left px-3 py-2 rounded text-[13px] transition-colors mb-3 ${
+                  tab === 'home'
+                    ? 'font-bold text-navy bg-gray100 border-l-[3px] border-orange pl-[9px]'
+                    : 'font-medium text-charcoal hover:bg-gray100'
+                }`}
+              >
+                Home
+              </button>
+
               <div className="text-[10px] uppercase tracking-[0.08em] font-semibold text-charcoal px-2 mb-2">Workspace</div>
               {['Dashboard', 'Peer Groups'].map(label => (
                 <button
@@ -114,6 +127,7 @@ export default function App() {
         </header>
 
         <main>
+          {tab === 'home' && <DashboardPage onNavigate={setTab} />}
           {tab === 'stip' && <StipPage />}
           {tab === 'ltip' && <LtipPage />}
           {tab === 'benchmarking' && (
