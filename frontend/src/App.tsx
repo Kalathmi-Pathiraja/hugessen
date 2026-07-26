@@ -3,19 +3,22 @@ import StipPage from './components/stip/StipPage'
 import LtipPage from './components/ltip/LtipPage'
 import BenchmarkingModule from './components/benchmarking/BenchmarkingModule'
 import BenchmarkingErrorBoundary from './components/benchmarking/BenchmarkingErrorBoundary'
+import AIHubPage from './components/aihub/AIHubPage'
 
-type Tab = 'stip' | 'ltip' | 'benchmarking'
+type Tab = 'stip' | 'ltip' | 'benchmarking' | 'aihub'
 
 const TOOLS: { id: Tab; label: string }[] = [
   { id: 'stip', label: 'STIP' },
   { id: 'ltip', label: 'LTIP' },
   { id: 'benchmarking', label: 'Compensation Benchmarking' },
+  { id: 'aihub', label: 'AI Hub' },
 ]
 
 const HEADER_TITLE: Record<Tab, string> = {
   stip: 'Incentive Plan Design',
   ltip: 'Incentive Plan Design',
   benchmarking: 'Executive Compensation Benchmarking',
+  aihub: 'AI Hub',
 }
 
 export default function App() {
@@ -118,6 +121,7 @@ export default function App() {
               <BenchmarkingModule />
             </BenchmarkingErrorBoundary>
           )}
+          {tab === 'aihub' && <AIHubPage />}
         </main>
       </div>
     </div>
