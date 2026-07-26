@@ -50,8 +50,8 @@ export default function App() {
             onClick={() => setSidebarOpen(false)}
           />
           <div className="fixed left-14 top-0 bottom-0 w-[236px] bg-white border-r border-gray300 shadow-popover z-40 flex flex-col">
-            <div className="px-[22px] pt-6 pb-5 border-b border-gray200">
-              <img src="/branding/hugessen-logo.png" alt="Hugessen Consulting" className="w-full max-w-[150px] h-auto block" />
+            <div className="px-[22px] pt-6 pb-5 border-b border-gray200 text-center">
+              <img src="/branding/hugessen-logo.png" alt="Hugessen Consulting" className="max-w-[150px] h-auto block mx-auto" />
               <div className="text-[10px] uppercase tracking-[0.08em] text-charcoal mt-2">Advisory Platform</div>
             </div>
             <nav className="flex-1 px-3 py-4 overflow-y-auto">

@@ -48,7 +48,7 @@ function ToolIcon({ id, color }: { id: ToolId; color: string }) {
 
 export default function DashboardPage({ onNavigate }: { onNavigate: (id: ToolId) => void }) {
   return (
-    <div className="px-[60px] pt-9 pb-12 max-w-[1180px]">
+    <div className="px-[60px] pt-9 pb-12 max-w-[1180px] mx-auto">
       <h1 className="font-display font-normal text-[36px] leading-tight text-orange mb-2">Our Tools</h1>
       <p className="text-[15px] italic text-[#8a8d93] leading-relaxed bg-orange/10 px-6 py-4 rounded-lg mb-8">
         A platform of tools our team uses across executive compensation mandates
