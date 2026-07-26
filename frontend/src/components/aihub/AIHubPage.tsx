@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useState } from 'react'
+import { CSSProperties, ReactNode, memo, useMemo, useState } from 'react'
 import { AI_HUB_ITEMS, AIHubItem } from './aiHubData'
 
 type Screen = 'foundations' | 'prompts'
@@ -71,7 +71,7 @@ function Callout({ children, warn }: { children: ReactNode; warn?: boolean }) {
   )
 }
 
-function FoundationCard({ item }: { item: AIHubItem }) {
+const FoundationCard = memo(function FoundationCard({ item }: { item: AIHubItem }) {
   const [open, setOpen] = useState(false)
   return (
     <div className="bg-white border border-gray300 rounded mb-3 overflow-hidden">
@@ -109,9 +109,9 @@ function FoundationCard({ item }: { item: AIHubItem }) {
       )}
     </div>
   )
-}
+})
 
-function PromptCard({ item }: { item: AIHubItem }) {
+const PromptCard = memo(function PromptCard({ item }: { item: AIHubItem }) {
   const [open, setOpen] = useState(false)
   return (
     <div className="bg-white border border-gray300 rounded mb-3 overflow-hidden">
@@ -145,7 +145,10 @@ function PromptCard({ item }: { item: AIHubItem }) {
                 <div className="text-[11px] uppercase tracking-[0.12em] font-semibold text-orange">Prompt</div>
                 <CopyButton text={item.prompt} />
               </div>
-              <pre className="text-[12px] leading-relaxed text-ink bg-gray100 border border-gray300 rounded p-4 overflow-x-auto whitespace-pre-wrap font-mono max-h-[420px] overflow-y-auto">
+              <pre
+                className="text-[12px] leading-relaxed text-ink bg-gray100 border border-gray300 rounded p-4 overflow-x-auto whitespace-pre-wrap font-mono max-h-[420px] overflow-y-auto"
+                style={{ contentVisibility: 'auto', containIntrinsicSize: '0 420px' } as CSSProperties}
+              >
                 {item.prompt}
               </pre>
             </div>
@@ -160,7 +163,7 @@ function PromptCard({ item }: { item: AIHubItem }) {
       )}
     </div>
   )
-}
+})
 
 function BuildPromptGuideCard() {
   const [open, setOpen] = useState(false)
