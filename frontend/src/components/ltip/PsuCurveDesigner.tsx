@@ -237,7 +237,7 @@ export default function PsuCurveDesigner({ config, onChange, vestingTerm = 3 }: 
                 />
                 <Area type="linear" dataKey="y" fill={BRAND.orange} fillOpacity={0.08} stroke="none" isAnimationActive={false} />
                 <Line type="linear" dataKey="y" stroke={BRAND.orange} strokeWidth={3} dot={false} isAnimationActive={false} />
-                {scoring === 'gap' && (
+                {(scoring === 'gap' || scoring === 'gap_median') && (
                   <ReferenceLine x={0} stroke={BRAND.navy} strokeWidth={2}
                     label={{ value: 'Peer Parity (Target)', position: 'insideTopRight', fill: BRAND.navy, fontSize: 11, fontWeight: 600 }} />
                 )}
@@ -254,8 +254,8 @@ export default function PsuCurveDesigner({ config, onChange, vestingTerm = 3 }: 
             </ResponsiveContainer>
           </div>
 
-          {/* rTSR inputs — swap between gap and percentile_rank */}
-          {scoring === 'gap' ? (
+          {/* rTSR inputs — swap between gap-based (gap, gap_median) and percentile_rank */}
+          {scoring !== 'percentile_rank' ? (
             <div className="grid grid-cols-2 gap-4">
               <SliderPair
                 label="Threshold"
