@@ -48,19 +48,23 @@ function ComparisonTable({ scenarios }: { scenarios: ScenarioSnapshot[] }) {
           <tr className="bg-offwhite border-b border-lightgrey">
             <td colSpan={done.length + 1} className={headCol}>Payout (% of Target)</td>
           </tr>
+          {/* Note: each saved scenario can have been run with its own bear/base/bull
+              percentiles, so the row label stays generic and the actual percentile
+              used is shown per-cell (sourced from that scenario's own results). */}
           {[
-            { label: 'Bear (P10)', key: 'bear_pct_of_target' as keyof StipResults, dollarKey: 'bear_dollar' as keyof StipResults },
-            { label: 'Base (P50)', key: 'base_pct_of_target' as keyof StipResults, dollarKey: 'base_dollar' as keyof StipResults },
-            { label: 'Bull (P90)', key: 'bull_pct_of_target' as keyof StipResults, dollarKey: 'bull_dollar' as keyof StipResults },
-          ].map(({ label, key, dollarKey }, ri) => (
+            { label: 'Bear', key: 'bear_pct_of_target' as keyof StipResults, dollarKey: 'bear_dollar' as keyof StipResults, pKey: 'bear' as const },
+            { label: 'Base', key: 'base_pct_of_target' as keyof StipResults, dollarKey: 'base_dollar' as keyof StipResults, pKey: 'base' as const },
+            { label: 'Bull', key: 'bull_pct_of_target' as keyof StipResults, dollarKey: 'bull_dollar' as keyof StipResults, pKey: 'bull' as const },
+          ].map(({ label, key, dollarKey, pKey }, ri) => (
             <tr key={label} className={`border-b border-lightgrey ${ri % 2 === 0 ? 'bg-white' : 'bg-offwhite/50'}`}>
               <td className="px-3 py-2 font-medium text-navy">{label}</td>
               {done.map(s => {
                 const v = s.results![key] as number
                 const d = s.results![dollarKey] as number
+                const p = s.results!.scenario_percentiles[pKey]
                 return (
                   <td key={s.id} className={`${colClass} text-navy`}>
-                    <div className="font-bold">{pct(v)}</div>
+                    <div className="font-bold">{pct(v)} <span className="font-normal text-xs text-slate">(P{p.toFixed(0)})</span></div>
                     <div className="text-xs text-slate">{fmt(d)}</div>
                   </td>
                 )
@@ -121,9 +125,9 @@ function CompactBulletChart({ scenario }: { scenario: ScenarioSnapshot }) {
   const ROW_H = 36
 
   const rows = [
-    { label: 'Bear (P10)', value: r.bear_pct_of_target, dollar: r.bear_dollar, color: '#64748b' },
-    { label: 'Base (P50)', value: r.base_pct_of_target, dollar: r.base_dollar, color: '#f97316' },
-    { label: 'Bull (P90)', value: r.bull_pct_of_target, dollar: r.bull_dollar, color: '#0a2342' },
+    { label: `Bear (P${r.scenario_percentiles.bear.toFixed(0)})`, value: r.bear_pct_of_target, dollar: r.bear_dollar, color: '#64748b' },
+    { label: `Base (P${r.scenario_percentiles.base.toFixed(0)})`, value: r.base_pct_of_target, dollar: r.base_dollar, color: '#f97316' },
+    { label: `Bull (P${r.scenario_percentiles.bull.toFixed(0)})`, value: r.bull_pct_of_target, dollar: r.bull_dollar, color: '#0a2342' },
   ]
 
   const targetX = (100 / MAX) * TRACK_W

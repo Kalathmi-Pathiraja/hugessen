@@ -27,6 +27,7 @@ interface Props {
 export default function StipResults({ results, peer, onExport, exporting }: Props) {
   const { bear_pct_of_target: bear, base_pct_of_target: base, bull_pct_of_target: bull } = results
   const tgt = results.target_opportunity
+  const { bear: bearP, base: baseP, bull: bullP } = results.scenario_percentiles
 
   // Peer band in % of target terms (peer inputs are % of salary, target is also % of salary)
   // We display peer band as absolute % of target payout — direct comparison
@@ -35,7 +36,7 @@ export default function StipResults({ results, peer, onExport, exporting }: Prop
 
   const tracks = [
     {
-      label: 'Bear Case (P10)',
+      label: `Bear Case (P${bearP.toFixed(0)})`,
       value: bear,
       valueLabel: `${bear.toFixed(1)}% of Target`,
       maxValue: 200,
@@ -46,7 +47,7 @@ export default function StipResults({ results, peer, onExport, exporting }: Prop
       color: BRAND.slate,
     },
     {
-      label: 'Base Case (P50)',
+      label: `Base Case (P${baseP.toFixed(0)})`,
       value: base,
       valueLabel: `${base.toFixed(1)}% of Target`,
       maxValue: 200,
@@ -57,7 +58,7 @@ export default function StipResults({ results, peer, onExport, exporting }: Prop
       color: BRAND.orange,
     },
     {
-      label: 'Bull Case (P90)',
+      label: `Bull Case (P${bullP.toFixed(0)})`,
       value: bull,
       valueLabel: `${bull.toFixed(1)}% of Target`,
       maxValue: 200,
@@ -81,9 +82,9 @@ export default function StipResults({ results, peer, onExport, exporting }: Prop
         {/* Dollar callout row */}
         <div className="mt-4 grid grid-cols-3 gap-4">
           {[
-            { label: 'Bear (P10)', pct: bear, dollar: results.bear_dollar, color: 'text-slate' },
-            { label: 'Base (P50)', pct: base, dollar: results.base_dollar, color: 'text-orange' },
-            { label: 'Bull (P90)', pct: bull, dollar: results.bull_dollar, color: 'text-navy' },
+            { label: `Bear (P${bearP.toFixed(0)})`, pct: bear, dollar: results.bear_dollar, color: 'text-slate' },
+            { label: `Base (P${baseP.toFixed(0)})`, pct: base, dollar: results.base_dollar, color: 'text-orange' },
+            { label: `Bull (P${bullP.toFixed(0)})`, pct: bull, dollar: results.bull_dollar, color: 'text-navy' },
           ].map(({ label, pct, dollar, color }) => (
             <div key={label} className="p-4 bg-offwhite rounded border border-lightgrey">
               <div className="text-xs text-slate mb-1">{label}</div>
@@ -217,10 +218,10 @@ export default function StipResults({ results, peer, onExport, exporting }: Prop
 
         return (
           <div className="mb-8">
-            <h3 className="text-base font-semibold text-navy mb-1">Per-Metric Achievement (P10 / P50 / P90)</h3>
+            <h3 className="text-base font-semibold text-navy mb-1">Per-Metric Achievement (P{bearP.toFixed(0)} / P{baseP.toFixed(0)} / P{bullP.toFixed(0)})</h3>
             <p className="text-xs text-slate mb-3">
               Horizontal bars show the simulated achievement range for each metric.
-              The notch marks budget target (100%). Shaded range spans P10–P90; the filled bar is the median (P50).
+              The notch marks budget target (100%). Shaded range spans P{bearP.toFixed(0)}–P{bullP.toFixed(0)}; the filled bar is the P{baseP.toFixed(0)} case.
             </p>
             <div className="bg-white border border-lightgrey rounded overflow-hidden">
               {chartRows.map((stat, i) => {
@@ -257,7 +258,7 @@ export default function StipResults({ results, peer, onExport, exporting }: Prop
                       {/* Background track */}
                       <rect x={0} y={10} width={TRACK_W} height={16} rx={3} fill="#e5e7eb" />
 
-                      {/* P10–P90 range band */}
+                      {/* Bear–Bull range band */}
                       <rect
                         x={Math.min(p10x, p90x)}
                         y={10}
@@ -268,12 +269,12 @@ export default function StipResults({ results, peer, onExport, exporting }: Prop
                         opacity={0.15}
                       />
 
-                      {/* P50 filled bar */}
+                      {/* Base case filled bar */}
                       <rect x={0} y={13} width={Math.max(p50x, 2)} height={10} rx={2} fill={medColor} />
 
-                      {/* P10 tick */}
+                      {/* Bear tick */}
                       <line x1={p10x} y1={8} x2={p10x} y2={28} stroke={medColor} strokeWidth={1.5} opacity={0.5} />
-                      {/* P90 tick */}
+                      {/* Bull tick */}
                       <line x1={p90x} y1={8} x2={p90x} y2={28} stroke={medColor} strokeWidth={1.5} opacity={0.5} />
 
                       {/* Threshold notch */}
@@ -294,13 +295,13 @@ export default function StipResults({ results, peer, onExport, exporting }: Prop
                     {/* Right stats — stacked rows to prevent wrapping */}
                     <div style={{ width: 80, minWidth: 80 }} className="flex-shrink-0 text-xs text-right">
                       <div className="flex justify-between text-slate/50 mb-0.5">
-                        <span>P10</span><span style={{ color: medColor }}>{stat.bear_achievement_pct.toFixed(0)}%</span>
+                        <span>P{bearP.toFixed(0)}</span><span style={{ color: medColor }}>{stat.bear_achievement_pct.toFixed(0)}%</span>
                       </div>
                       <div className="flex justify-between font-bold mb-0.5">
-                        <span className="text-slate/50">P50</span><span style={{ color: medColor }}>{stat.base_achievement_pct.toFixed(0)}%</span>
+                        <span className="text-slate/50">P{baseP.toFixed(0)}</span><span style={{ color: medColor }}>{stat.base_achievement_pct.toFixed(0)}%</span>
                       </div>
                       <div className="flex justify-between text-slate/50">
-                        <span>P90</span><span style={{ color: medColor }}>{stat.bull_achievement_pct.toFixed(0)}%</span>
+                        <span>P{bullP.toFixed(0)}</span><span style={{ color: medColor }}>{stat.bull_achievement_pct.toFixed(0)}%</span>
                       </div>
                     </div>
                   </div>
@@ -339,9 +340,9 @@ export default function StipResults({ results, peer, onExport, exporting }: Prop
                   <tr className="bg-navy text-white">
                     <th className="text-left px-3 py-2.5 font-semibold rounded-tl-lg">Metric</th>
                     <th className="text-center px-3 py-2.5 font-semibold">Budget Target</th>
-                    <th className="text-center px-3 py-2.5 font-semibold text-slate/80">Bear (P10)</th>
-                    <th className="text-center px-3 py-2.5 font-semibold text-orange/90">Base (P50)</th>
-                    <th className="text-center px-3 py-2.5 font-semibold rounded-tr-lg">Bull (P90)</th>
+                    <th className="text-center px-3 py-2.5 font-semibold text-slate/80">Bear (P{bearP.toFixed(0)})</th>
+                    <th className="text-center px-3 py-2.5 font-semibold text-orange/90">Base (P{baseP.toFixed(0)})</th>
+                    <th className="text-center px-3 py-2.5 font-semibold rounded-tr-lg">Bull (P{bullP.toFixed(0)})</th>
                   </tr>
                 </thead>
                 <tbody>

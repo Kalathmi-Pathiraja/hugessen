@@ -140,10 +140,11 @@ def export_stip(inputs: Dict[str, Any], results: Dict[str, Any]) -> bytes:
     r += 1
 
     tgt = results["target_opportunity"]
+    sp = results.get("scenario_percentiles") or {"bear": 10, "base": 50, "bull": 90}
     scenarios = [
-        ("Bear Case (P10)", results["bear_pct_of_target"], results["bear_dollar"]),
-        ("Base Case (P50)", results["base_pct_of_target"], results["base_dollar"]),
-        ("Bull Case (P90)", results["bull_pct_of_target"], results["bull_dollar"]),
+        (f"Bear Case (P{sp['bear']:.0f})", results["bear_pct_of_target"], results["bear_dollar"]),
+        (f"Base Case (P{sp['base']:.0f})", results["base_pct_of_target"], results["base_dollar"]),
+        (f"Bull Case (P{sp['bull']:.0f})", results["bull_pct_of_target"], results["bull_dollar"]),
     ]
     colors = [SLATE, ORANGE, NAVY]
     for (label, pct, dollar), color in zip(scenarios, colors):

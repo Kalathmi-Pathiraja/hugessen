@@ -10,8 +10,10 @@ import ScenarioComparison from './ScenarioComparison'
 import { stipApi } from '../../api/client'
 import {
   CurveDesign, ScorecardMetric, PeerBenchmark, StipResults as ResultsType,
-  Category, DEFAULT_CATEGORIES, ScenarioSnapshot,
+  Category, DEFAULT_CATEGORIES, ScenarioSnapshot, ScenarioPercentiles,
 } from '../../types/stip'
+
+const DEFAULT_SCENARIO_PERCENTILES: ScenarioPercentiles = { bear: 10, base: 50, bull: 90 }
 
 const DEFAULT_CURVE: CurveDesign = {
   threshold_enabled: false,
@@ -41,6 +43,7 @@ export default function StipPage() {
   const [peer, setPeer] = useState<PeerBenchmark>(DEFAULT_PEER)
 
   const [boardDiscretionPct, setBoardDiscretionPct] = useState(0)   // decimal, e.g. 0.15 = ±15%
+  const [scenarioPercentiles, setScenarioPercentiles] = useState<ScenarioPercentiles>(DEFAULT_SCENARIO_PERCENTILES)
 
   const [running, setRunning] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -73,7 +76,7 @@ export default function StipPage() {
   function buildPayload(
     bs: number, tsp: number, dist: 'lognormal' | 'normal',
     c: typeof curve, mets: typeof metrics, corr: number[][],
-    p: typeof peer, disc: number
+    p: typeof peer, disc: number, sp: ScenarioPercentiles
   ) {
     return {
       base_salary: bs,
@@ -106,6 +109,7 @@ export default function StipPage() {
       correlation_matrix: corr.length ? corr : buildDefaultMatrix(mets),
       peer_benchmark: p,
       board_discretion_pct: disc,
+      scenario_percentiles: sp,
     }
   }
 
@@ -141,7 +145,7 @@ export default function StipPage() {
     setTimeout(() => scenarioRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
 
     try {
-      const payload = buildPayload(baseSalary, targetStipPct, distribution, curve, metrics, corrMatrix, peer, boardDiscretionPct)
+      const payload = buildPayload(baseSalary, targetStipPct, distribution, curve, metrics, corrMatrix, peer, boardDiscretionPct, scenarioPercentiles)
       const res = await stipApi.simulate(payload) as ResultsType
       setScenarios(prev => prev.map(s => s.id === id ? { ...s, results: res, running: false } : s))
     } catch (e: any) {
@@ -164,7 +168,7 @@ export default function StipPage() {
 
     setRunning(true)
     try {
-      const payload = buildPayload(baseSalary, targetStipPct, distribution, curve, metrics, corrMatrix, peer, boardDiscretionPct)
+      const payload = buildPayload(baseSalary, targetStipPct, distribution, curve, metrics, corrMatrix, peer, boardDiscretionPct, scenarioPercentiles)
       const res = await stipApi.simulate(payload) as ResultsType
       setResults(res)
       setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
@@ -208,6 +212,10 @@ export default function StipPage() {
           correlation_matrix: corrMatrix,
           peer_benchmark: peer,
           board_discretion_pct: boardDiscretionPct,
+          // Source from the results actually being exported, not live UI state —
+          // guarantees the export labels match the numbers even if the user
+          // tweaks the percentile inputs after running but before exporting.
+          scenario_percentiles: results.scenario_percentiles,
         },
         results,
       })
@@ -229,7 +237,9 @@ export default function StipPage() {
         baseSalary={baseSalary}
         targetStipPct={targetStipPct}
         distribution={distribution}
+        scenarioPercentiles={scenarioPercentiles}
         onChange={handleBaselineChange}
+        onPercentileChange={(field, value) => setScenarioPercentiles(prev => ({ ...prev, [field]: value }))}
       />
 
       <PayoutCurveDesigner curve={curve} onChange={setCurve} />
@@ -312,7 +322,7 @@ export default function StipPage() {
             <p className="mt-3 text-xs text-slate/70 bg-offwhite rounded px-3 py-2 border border-lightgrey">
               In each trial the simulation draws a uniform random adjustment between
               −{Math.round(boardDiscretionPct * 100)}% and +{Math.round(boardDiscretionPct * 100)}%
-              and multiplies it against the formula payout. This widens the P10–P90 range
+              and multiplies it against the formula payout. This widens the bear–bull range
               and slightly lowers the median vs. formula-only output.
             </p>
           )}

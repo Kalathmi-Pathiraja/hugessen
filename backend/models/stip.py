@@ -1,5 +1,13 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List
+
+
+class ScenarioPercentiles(BaseModel):
+    """Which percentiles of the simulated payout distribution to label as
+    Bear/Base/Bull. Defaults match the platform's historical fixed values."""
+    bear: float = 10
+    base: float = 50
+    bull: float = 90
 
 
 class MilestoneOutcome(BaseModel):
@@ -60,6 +68,7 @@ class StipSimulateRequest(BaseModel):
     peer_benchmark: Optional[PeerBenchmark] = None
     # Pass 2 — plan-level board discretion modifier
     board_discretion_pct: float = 0.0   # max ±adjustment as decimal (e.g. 0.20 = ±20%)
+    scenario_percentiles: ScenarioPercentiles = Field(default_factory=ScenarioPercentiles)
 
     @field_validator("scorecard_metrics")
     @classmethod

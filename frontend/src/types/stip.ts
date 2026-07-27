@@ -152,6 +152,12 @@ export interface ScenarioSnapshot {
   error: string | null
 }
 
+export interface ScenarioPercentiles {
+  bear: number
+  base: number
+  bull: number
+}
+
 export interface StipResults {
   bear_pct_of_target: number
   base_pct_of_target: number
@@ -162,4 +168,5 @@ export interface StipResults {
   target_opportunity: number
   metric_stats: MetricStat[]
   percentile_distribution: number[]
+  scenario_percentiles: ScenarioPercentiles
 }

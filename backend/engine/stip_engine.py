@@ -256,9 +256,13 @@ def run_stip_simulation(payload: Dict[str, Any]) -> Dict[str, Any]:
         overall_multipliers = np.maximum(overall_multipliers * (1.0 + disc_draws), 0.0)
 
     # ── Percentiles ──────────────────────────────────────────────────────────
+    sp = payload.get("scenario_percentiles") or {}
+    bear_pct = float(sp.get("bear", 10))
+    base_pct = float(sp.get("base", 50))
+    bull_pct = float(sp.get("bull", 90))
     payout_pct        = overall_multipliers * 100.0
     payout_pct_sorted = np.sort(payout_pct)
-    bear, base, bull  = np.percentile(payout_pct_sorted, [10, 50, 90])
+    bear, base, bull  = np.percentile(payout_pct_sorted, [bear_pct, base_pct, bull_pct])
     percentile_distribution = np.percentile(payout_pct_sorted, np.arange(1, 101)).tolist()
 
     # ── Per-metric stats ──────────────────────────────────────────────────────
@@ -290,7 +294,7 @@ def run_stip_simulation(payload: Dict[str, Any]) -> Dict[str, Any]:
             })
             continue
 
-        p10_ach, p50_ach, p90_ach = np.percentile(achievement[i], [10, 50, 90])
+        bear_ach, base_ach, bull_ach = np.percentile(achievement[i], [bear_pct, base_pct, bull_pct])
         inferred = metric_inferred[i]
 
         # prob_above_threshold: fraction of sims where any payout occurs (mult > 0)
@@ -304,12 +308,12 @@ def run_stip_simulation(payload: Dict[str, Any]) -> Dict[str, Any]:
             "prob_max":     round(float(np.mean(multipliers[i] >= max_pay)) * 100, 1),
             "median_mult":  round(float(np.percentile(multipliers[i], 50)), 3),
             "budget_target": budget,
-            "bear_raw":  round(float(p10_ach) * budget, 4),
-            "base_raw":  round(float(p50_ach) * budget, 4),
-            "bull_raw":  round(float(p90_ach) * budget, 4),
-            "bear_achievement_pct": round(float(p10_ach) * 100, 1),
-            "base_achievement_pct": round(float(p50_ach) * 100, 1),
-            "bull_achievement_pct": round(float(p90_ach) * 100, 1),
+            "bear_raw":  round(float(bear_ach) * budget, 4),
+            "base_raw":  round(float(base_ach) * budget, 4),
+            "bull_raw":  round(float(bull_ach) * budget, 4),
+            "bear_achievement_pct": round(float(bear_ach) * 100, 1),
+            "base_achievement_pct": round(float(base_ach) * 100, 1),
+            "bull_achievement_pct": round(float(bull_ach) * 100, 1),
             "metric_behavior": behavior,
             "metric_direction": m.get("metric_direction", "higher"),
             "threshold_perf": round(t_perf * 100, 1),
@@ -335,4 +339,5 @@ def run_stip_simulation(payload: Dict[str, Any]) -> Dict[str, Any]:
         "target_opportunity": target_opp,
         "metric_stats": metric_stats,
         "percentile_distribution": percentile_distribution,
+        "scenario_percentiles": {"bear": bear_pct, "base": base_pct, "bull": bull_pct},
     }
