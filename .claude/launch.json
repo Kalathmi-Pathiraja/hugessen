@@ -7,6 +7,13 @@
       "runtimeArgs": ["run", "dev"],
       "cwd": "frontend",
       "port": 5173
+    },
+    {
+      "name": "backend",
+      "runtimeExecutable": "env",
+      "runtimeArgs": ["SITE_PASSWORD=local-dev-only", "SESSION_SECRET=local-dev-only-secret-not-for-production", "python3", "-m", "uvicorn", "main:app", "--port", "8000"],
+      "cwd": "backend",
+      "port": 8000
     }
   ]
 }

@@ -6,6 +6,7 @@ import BenchmarkingErrorBoundary from './components/benchmarking/BenchmarkingErr
 import AIHubPage from './components/aihub/AIHubPage'
 import DashboardPage from './components/dashboard/DashboardPage'
 import { useFeatureUnlock } from './hooks/useFeatureUnlock'
+import { authApi } from './api/client'
 
 type Tab = 'home' | 'stip' | 'ltip' | 'benchmarking' | 'aihub'
 
@@ -112,14 +113,22 @@ export default function App() {
                 </button>
               ))}
             </nav>
-            <div className="px-4 py-3.5 border-t border-gray200 flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-full bg-navy text-white text-[11px] font-semibold flex items-center justify-center shrink-0">
-                HC
+            <div className="px-4 py-3.5 border-t border-gray200 flex items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-7 h-7 rounded-full bg-navy text-white text-[11px] font-semibold flex items-center justify-center shrink-0">
+                  HC
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[12px] font-semibold text-navy leading-tight truncate">Hugessen Consulting</div>
+                  <div className="text-[11px] text-charcoal leading-tight">Analyst</div>
+                </div>
               </div>
-              <div>
-                <div className="text-[12px] font-semibold text-navy leading-tight">Hugessen Consulting</div>
-                <div className="text-[11px] text-charcoal leading-tight">Analyst</div>
-              </div>
+              <button
+                onClick={() => authApi.logout().then(() => window.location.reload())}
+                className="text-[11px] font-semibold text-charcoal hover:text-orange transition-colors shrink-0"
+              >
+                Log out
+              </button>
             </div>
           </div>
         </>

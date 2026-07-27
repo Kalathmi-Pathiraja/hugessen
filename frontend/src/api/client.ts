@@ -8,6 +8,7 @@ const BASE = `${import.meta.env.VITE_API_BASE ?? ''}/api/v1`
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     headers: { 'Content-Type': 'application/json', ...options.headers },
+    credentials: 'include',
     ...options,
   })
   if (!res.ok) {
@@ -15,6 +16,30 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     throw new Error(err.detail ?? 'Request failed')
   }
   return res.json()
+}
+
+// Site-wide session auth (single shared password, server-verified session cookie)
+const AUTH_BASE = `${import.meta.env.VITE_API_BASE ?? ''}/api/v1/auth`
+
+export const authApi = {
+  checkSession: (): Promise<{ authenticated: boolean }> =>
+    fetch(`${AUTH_BASE}/session`, { credentials: 'include' }).then(r => r.json()),
+
+  login: async (password: string): Promise<void> => {
+    const res = await fetch(`${AUTH_BASE}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ password }),
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: 'Login failed' }))
+      throw new Error(err.detail ?? 'Login failed')
+    }
+  },
+
+  logout: (): Promise<void> =>
+    fetch(`${AUTH_BASE}/logout`, { method: 'POST', credentials: 'include' }).then(() => undefined),
 }
 
 // STIP
@@ -32,6 +57,7 @@ export const stipApi = {
     const res = await fetch(`${BASE}/stip/export`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(payload),
     })
     if (!res.ok) throw new Error('Export failed')
@@ -48,7 +74,7 @@ export const stipApi = {
 // LTIP
 export const ltipApi = {
   downloadTemplate: async (): Promise<void> => {
-    const res = await fetch(`${BASE}/ltip/template`)
+    const res = await fetch(`${BASE}/ltip/template`, { credentials: 'include' })
     if (!res.ok) throw new Error('Template download failed')
     const blob = await res.blob()
     const url = URL.createObjectURL(blob)
@@ -62,7 +88,7 @@ export const ltipApi = {
   uploadData: async (file: File): Promise<object> => {
     const form = new FormData()
     form.append('file', file)
-    const res = await fetch(`${BASE}/ltip/upload-data`, { method: 'POST', body: form })
+    const res = await fetch(`${BASE}/ltip/upload-data`, { method: 'POST', credentials: 'include', body: form })
     if (!res.ok) {
       const err = await res.json().catch(() => ({ detail: res.statusText }))
       throw new Error(err.detail ?? 'Upload failed')
@@ -77,6 +103,7 @@ export const ltipApi = {
     const res = await fetch(`${BASE}/ltip/export`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(payload),
     })
     if (!res.ok) throw new Error('Export failed')
@@ -95,7 +122,7 @@ export const benchmarkingApi = {
   uploadBenchmarkFile: async (file: File): Promise<BenchmarkData> => {
     const form = new FormData()
     form.append('file', file)
-    const res = await fetch(`${BASE}/benchmarking/upload`, { method: 'POST', body: form })
+    const res = await fetch(`${BASE}/benchmarking/upload`, { method: 'POST', credentials: 'include', body: form })
     if (!res.ok) {
       const err = await res.json().catch(() => ({ detail: res.statusText }))
       throw new Error(err.detail ?? 'Upload failed')
@@ -116,6 +143,7 @@ export const benchmarkingApi = {
     const res = await fetch(`${BASE}/benchmarking/export`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(payload),
     })
     if (!res.ok) throw new Error('Export failed')

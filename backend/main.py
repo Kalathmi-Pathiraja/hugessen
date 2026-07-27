@@ -3,6 +3,8 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from auth import RequireSession
+from routers.auth import router as auth_router
 from routers.stip import router as stip_router
 from routers.ltip import router as ltip_router
 from routers.benchmarking import router as benchmarking_router
@@ -26,9 +28,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(stip_router)
-app.include_router(ltip_router)
-app.include_router(benchmarking_router)
+app.include_router(auth_router)
+app.include_router(stip_router, dependencies=[RequireSession])
+app.include_router(ltip_router, dependencies=[RequireSession])
+app.include_router(benchmarking_router, dependencies=[RequireSession])
 
 
 @app.get("/")
