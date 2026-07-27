@@ -357,7 +357,7 @@ export default function AIHubPage() {
     <div className="max-w-5xl mx-auto px-6 py-8">
       <div className="mb-5">
         <p className="text-[11px] uppercase tracking-[0.16em] text-orange font-semibold mb-1">Resources</p>
-        <h1 className="text-[30px] leading-tight text-navy font-display">AI Hub</h1>
+        <h1 className="text-[30px] leading-tight text-navy font-display">AI University</h1>
         <p className="text-[14px] text-charcoal mt-1.5 max-w-2xl leading-relaxed">
           How we're using AI at Hugessen — foundations and prompts shared across the firm.
         </p>

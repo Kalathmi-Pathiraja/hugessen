@@ -13,7 +13,7 @@ const TOOLS: { id: Exclude<Tab, 'home'>; label: string }[] = [
   { id: 'stip', label: 'STIP' },
   { id: 'ltip', label: 'LTIP' },
   { id: 'benchmarking', label: 'Compensation Benchmarking' },
-  { id: 'aihub', label: 'AI Hub' },
+  { id: 'aihub', label: 'AI University' },
 ]
 
 const HEADER_TITLE: Record<Tab, string> = {
@@ -21,7 +21,7 @@ const HEADER_TITLE: Record<Tab, string> = {
   stip: 'Incentive Plan Design',
   ltip: 'Incentive Plan Design',
   benchmarking: 'Executive Compensation Benchmarking',
-  aihub: 'AI Hub',
+  aihub: 'AI University',
 }
 
 export default function App() {

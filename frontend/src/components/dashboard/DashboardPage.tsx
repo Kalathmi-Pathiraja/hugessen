@@ -9,7 +9,7 @@ interface Tool {
 }
 
 const TOOLS: Tool[] = [
-  { id: 'aihub', index: '01', name: 'AI Hub', color: '#3A1408', description: 'Copilot foundations and ready-to-run prompts.' },
+  { id: 'aihub', index: '01', name: 'AI University', color: '#3A1408', description: 'Copilot foundations and ready-to-run prompts.' },
   { id: 'stip', index: '02', name: 'STIP Design', color: '#F0531E', description: 'Design a scorecard and simulate bonus payouts against target.' },
   { id: 'ltip', index: '03', name: 'LTIP Design', color: '#F4A578', description: 'Size equity grants and simulate vesting outcomes.' },
   { id: 'benchmarking', index: '04', name: 'Compensation Benchmarking', color: '#5F6269', description: 'Peer pay regression and percentile positioning by role.' },
