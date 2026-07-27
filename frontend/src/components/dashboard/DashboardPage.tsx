@@ -46,7 +46,11 @@ function ToolIcon({ id, color }: { id: ToolId; color: string }) {
   )
 }
 
-export default function DashboardPage({ onNavigate }: { onNavigate: (id: ToolId) => void }) {
+export default function DashboardPage({ onNavigate, benchmarkingUnlocked = true }: {
+  onNavigate: (id: ToolId) => void
+  benchmarkingUnlocked?: boolean
+}) {
+  const isLocked = (id: ToolId) => id === 'benchmarking' && !benchmarkingUnlocked
   return (
     <div className="px-[60px] pt-9 pb-12 max-w-[1180px] mx-auto">
       <h1 className="font-display font-normal text-[36px] leading-tight text-orange mb-2">Our Tools</h1>
@@ -66,30 +70,47 @@ export default function DashboardPage({ onNavigate }: { onNavigate: (id: ToolId)
 
       <div className="rounded-[14px] overflow-hidden shadow-[0_12px_30px_-16px_rgba(0,26,64,0.25)] mb-7 bg-white">
         <div className="flex gap-1">
-          {TOOLS.map(tool => (
-            <button
-              key={tool.id}
-              onClick={() => onNavigate(tool.id)}
-              style={{ backgroundColor: tool.color }}
-              className="flex-1 py-4 px-[22px] flex items-center justify-center gap-2.5 transition-transform duration-150 hover:scale-105 hover:z-10"
-            >
-              <span className="text-[12px] font-bold text-white/80">{tool.index}</span>
-              <span className="text-[13.5px] font-semibold text-white">{tool.name}</span>
-            </button>
-          ))}
+          {TOOLS.map(tool => {
+            const locked = isLocked(tool.id)
+            return (
+              <button
+                key={tool.id}
+                disabled={locked}
+                onClick={() => !locked && onNavigate(tool.id)}
+                style={{ backgroundColor: locked ? undefined : tool.color }}
+                className={`flex-1 py-4 px-[22px] flex items-center justify-center gap-2.5 transition-transform duration-150 ${
+                  locked ? 'bg-gray200 cursor-default' : 'hover:scale-105 hover:z-10'
+                }`}
+              >
+                <span className={`text-[12px] font-bold ${locked ? 'text-charcoal/50' : 'text-white/80'}`}>{tool.index}</span>
+                <span className={`text-[13.5px] font-semibold ${locked ? 'text-charcoal/70' : 'text-white'}`}>{tool.name}</span>
+                {locked && (
+                  <span className="text-[10px] uppercase tracking-wide font-semibold text-charcoal/60 bg-white px-1.5 py-0.5 rounded ml-1">
+                    Coming soon
+                  </span>
+                )}
+              </button>
+            )
+          })}
         </div>
       </div>
 
       <div className="flex">
-        {TOOLS.map(tool => (
-          <button
-            key={tool.id}
-            onClick={() => onNavigate(tool.id)}
-            className="flex-1 px-[22px] text-center"
-          >
-            <p className="text-[13.5px] text-[#3d4350] leading-relaxed">{tool.description}</p>
-          </button>
-        ))}
+        {TOOLS.map(tool => {
+          const locked = isLocked(tool.id)
+          return (
+            <button
+              key={tool.id}
+              disabled={locked}
+              onClick={() => !locked && onNavigate(tool.id)}
+              className={`flex-1 px-[22px] text-center ${locked ? 'cursor-default' : ''}`}
+            >
+              <p className={`text-[13.5px] leading-relaxed ${locked ? 'text-[#8a8d93] italic' : 'text-[#3d4350]'}`}>
+                {locked ? 'Coming soon.' : tool.description}
+              </p>
+            </button>
+          )
+        })}
       </div>
     </div>
   )

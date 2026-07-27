@@ -5,6 +5,7 @@ import BenchmarkingModule from './components/benchmarking/BenchmarkingModule'
 import BenchmarkingErrorBoundary from './components/benchmarking/BenchmarkingErrorBoundary'
 import AIHubPage from './components/aihub/AIHubPage'
 import DashboardPage from './components/dashboard/DashboardPage'
+import { useFeatureUnlock } from './hooks/useFeatureUnlock'
 
 type Tab = 'home' | 'stip' | 'ltip' | 'benchmarking' | 'aihub'
 
@@ -26,6 +27,7 @@ const HEADER_TITLE: Record<Tab, string> = {
 export default function App() {
   const [tab, setTab] = useState<Tab>('home')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const benchmarkingUnlocked = useFeatureUnlock('benchmarking')
 
   return (
     <div className="min-h-screen bg-offwhite font-sans flex">
@@ -77,19 +79,28 @@ export default function App() {
               ))}
 
               <div className="text-[10px] uppercase tracking-[0.08em] font-semibold text-charcoal px-2 mt-4 mb-2">Tools</div>
-              {TOOLS.map(t => (
-                <button
-                  key={t.id}
-                  onClick={() => { setTab(t.id); setSidebarOpen(false) }}
-                  className={`w-full text-left px-3 py-2 rounded text-[13px] transition-colors mb-0.5 ${
-                    tab === t.id
-                      ? 'font-bold text-navy bg-gray100 border-l-[3px] border-orange pl-[9px]'
-                      : 'font-medium text-charcoal hover:bg-gray100'
-                  }`}
-                >
-                  {t.label}
-                </button>
-              ))}
+              {TOOLS.map(t => {
+                const locked = t.id === 'benchmarking' && !benchmarkingUnlocked
+                return (
+                  <button
+                    key={t.id}
+                    disabled={locked}
+                    onClick={() => { if (!locked) { setTab(t.id); setSidebarOpen(false) } }}
+                    className={`w-full text-left px-3 py-2 rounded text-[13px] transition-colors mb-0.5 flex items-center justify-between gap-2 ${
+                      locked
+                        ? 'font-medium text-charcoal/40 cursor-default'
+                        : tab === t.id
+                        ? 'font-bold text-navy bg-gray100 border-l-[3px] border-orange pl-[9px]'
+                        : 'font-medium text-charcoal hover:bg-gray100'
+                    }`}
+                  >
+                    <span>{t.label}</span>
+                    {locked && (
+                      <span className="text-[9px] uppercase tracking-wide font-semibold text-charcoal/50 bg-gray100 px-1.5 py-0.5 rounded">Soon</span>
+                    )}
+                  </button>
+                )
+              })}
 
               <div className="text-[10px] uppercase tracking-[0.08em] font-semibold text-charcoal px-2 mt-4 mb-2">Analysis</div>
               {['Reports', 'Settings'].map(label => (
@@ -127,10 +138,10 @@ export default function App() {
         </header>
 
         <main>
-          {tab === 'home' && <DashboardPage onNavigate={setTab} />}
+          {tab === 'home' && <DashboardPage onNavigate={setTab} benchmarkingUnlocked={benchmarkingUnlocked} />}
           {tab === 'stip' && <StipPage />}
           {tab === 'ltip' && <LtipPage />}
-          {tab === 'benchmarking' && (
+          {tab === 'benchmarking' && benchmarkingUnlocked && (
             <BenchmarkingErrorBoundary>
               <BenchmarkingModule />
             </BenchmarkingErrorBoundary>
